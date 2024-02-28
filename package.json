@@ -1,0 +1,23 @@
+{
+  "name": "api-motus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint . --ext .js",
+    "start": "nodemon src/server.js",
+    "test": "mocha src/test"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.57.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "mocha": "^10.3.0",
+    "pg": "^8.11.3",
+    "postgres": "^3.4.3"
+  }
+}
