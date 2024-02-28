@@ -1,7 +1,8 @@
-const bookModel = require('../models/themeModel');
+const themeModel = require('../models/themeModel');
+const {themeConstructor} = require("../models/themeModel");
 
 getAllThemes = (req, res) => {
-    bookModel.getAllThemes((error, data) => {
+    themeModel.getAllThemes((error, data) => {
         if (error) {
             res.status(500).send({
                 message: error.message || "Erreur survenue lors de la recuperation des themes."
@@ -13,7 +14,7 @@ getAllThemes = (req, res) => {
 }
 
 getThemeById = (req, res) => {
-    bookModel.getThemeById(req.params.id, (error, data) => {
+    themeModel.getThemeById(req.params.id, (error, data) => {
         if (error) {
             res.status(500).send({
                 message: error.message || "Erreur survenue lors de la recuperation d'un theme."
@@ -25,7 +26,7 @@ getThemeById = (req, res) => {
 }
 
 addTheme = (req, res) => {
-    bookModel.addTheme(new bookModel.themeConstructor(req.body), (error, data) => {
+    themeModel.addTheme(new themeConstructor(req.body), (error, data) => {
         if (error) {
             res.status(500).send({
                 message: error.message || "Erreur survenue lors de l'ajout d'un theme."
@@ -37,7 +38,7 @@ addTheme = (req, res) => {
 }
 
 modifyTheme = (req, res) => {
-    bookModel.modifyTheme(req.params.id, new bookModel.themeConstructor(req.body), (error, data) => {
+    themeModel.modifyTheme(req.params.id, new themeConstructor(req.body), (error, data) => {
         if (error) {
             res.status(500).send({
                 message: error.message || "Erreur survenue lors de la moditication d'un theme."
@@ -49,7 +50,7 @@ modifyTheme = (req, res) => {
 }
 
 deleteTheme = (req, res) => {
-    bookModel.deleteTheme(req.params.id, (error, data) => {
+    themeModel.deleteTheme(req.params.id, (error, data) => {
         if (error) {
             res.status(500).send({
                 message: error.message || "Erreur survenue lors de la suppression d'un theme."
