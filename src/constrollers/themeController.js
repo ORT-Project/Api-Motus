@@ -1,5 +1,4 @@
 const themeModel = require('../models/themeModel');
-const {themeConstructor} = require("../models/themeModel");
 
 getAllThemes = (req, res) => {
     themeModel.getAllThemes((error, data) => {
@@ -26,7 +25,8 @@ getThemeById = (req, res) => {
 }
 
 addTheme = (req, res) => {
-    themeModel.addTheme(new themeConstructor(req.body), (error, data) => {
+    console.log(req)
+    themeModel.addTheme(new themeModel.themeConstructor(req.body), (error, data) => {
         if (error) {
             res.status(500).send({
                 message: error.message || "Erreur survenue lors de l'ajout d'un theme."
@@ -38,7 +38,7 @@ addTheme = (req, res) => {
 }
 
 modifyTheme = (req, res) => {
-    themeModel.modifyTheme(req.params.id, new themeConstructor(req.body), (error, data) => {
+    themeModel.modifyTheme(req.params.id, new themeModel.themeConstructor(req.body), (error, data) => {
         if (error) {
             res.status(500).send({
                 message: error.message || "Erreur survenue lors de la moditication d'un theme."

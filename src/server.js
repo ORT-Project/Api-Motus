@@ -15,8 +15,8 @@ const themeRouter = require('../src/routes/themeRouter.js');
 // Initialisation et configuration
 // ----------------------------------------------
 const server = express();
-// server.use(express.json());
-// server.set('json spaces', 2);
+server.use(express.json());
+server.set('json spaces', 2);
 
 server.use('/themes', themeRouter);
 
