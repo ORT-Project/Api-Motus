@@ -25,7 +25,6 @@ getThemeById = (req, res) => {
 }
 
 addTheme = (req, res) => {
-    console.log(req)
     themeModel.addTheme(new themeModel.themeConstructor(req.body), (error, data) => {
         if (error) {
             res.status(500).send({
