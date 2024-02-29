@@ -9,7 +9,6 @@ const wordModel = require('../models/wordModel');
  * @returns {Promise<void>}
  */
 getAllWords = async (req, res) => {
-    console.log('getAllWords');
     try {
         const data = await wordModel.findAll()
         res.status(200).send(data);
@@ -28,7 +27,6 @@ getAllWords = async (req, res) => {
  * @returns {Promise<void>}
  */
 getWordById = async (req, res) => {
-    console.log('getWordById')
     try {
         const data = await wordModel.findByPk(req.params.id)
         res.status(200).send(data);

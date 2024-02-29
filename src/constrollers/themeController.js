@@ -49,7 +49,7 @@ getAllThemesWithWords = async (req, res) => {
  * @returns {Promise<void>}
  */
 getThemeByName = async (req, res) => {
-    console.log(req.params.name)
+
     try {
         const data = await themeModel.findAll({
             where: {

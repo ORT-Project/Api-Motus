@@ -23,10 +23,12 @@ server.use('/themes', themeRouter);
 server.use('/words', wordRouter);
 
 server.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('API-Motus')
 })
 
 const port = Number(process.env.PORT || 3000)
 server.listen(port)
+
+console.log('Server started on link http://localhost:' + port);
 
 module.exports = server;
