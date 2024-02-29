@@ -1,22 +1,18 @@
-const {Client} = require("pg");
 const dotenv = require("dotenv");
+const {Sequelize} = require('sequelize');
+
 
 dotenv.config();
 
-const client = new Client({
-    host: process.env.DB_HOST,
-    database: process.env.DB_DATABASE,
-    user: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD
-})
+const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+    host: 'localhost',
+    dialect: 'postgres',
+    define: {
+        schema: 'public',
+        timestamps: false,
+        freezeTableName: true
+    }
+});
 
 
-client.connect()
-    .then(() => {
-        console.log('Connection a la BDD réussi, http://localhost:8081/')
-    })
-    .catch((e) => {
-        console.log('Connection a la BDD échoué', e);
-    });
-
-module.exports = client;
+module.exports = sequelize;
