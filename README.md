@@ -23,10 +23,16 @@ Aller dans le projet.
   cd Api-Motus
 ```
 
-Installer les dependences.
+Installer les dépendences.
 
 ```bash
   npm install
+```
+
+Installer le container Docker.
+
+```bash
+  docker-compose up
 ```
 
 Demarrer le server.
