@@ -6,12 +6,14 @@
   "scripts": {
     "lint": "eslint . --ext .js",
     "start": "nodemon src/server.js",
-    "test": "mocha src/test"
+    "test": "mocha src/test",
+    "swagger": "node ./src/swagger/swagger.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^8.57.0"
+    "eslint": "^8.57.0",
+    "swagger-autogen": "^2.23.7"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
@@ -20,6 +22,8 @@
     "pg": "^8.11.3",
     "postgres": "^3.4.3",
     "sequelize": "^6.37.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
   }
 }

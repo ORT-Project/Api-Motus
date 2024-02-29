@@ -14,7 +14,7 @@ router.get('/', getAllThemes);
 
 router.get('/words', getAllThemesWithWords);
 
-router.get('/:name', getThemeByName);
+router.get('/byName/:name', getThemeByName);
 
 router.get('/:id', getThemeById);
 
