@@ -2,6 +2,8 @@ const router = require('express').Router();
 
 const {
     getAllThemes,
+    getAllThemesWithWords,
+    getThemeByName,
     getThemeById,
     addTheme,
     modifyTheme,
@@ -9,6 +11,10 @@ const {
 } = require('../constrollers/themeController')
 
 router.get('/', getAllThemes);
+
+router.get('/words', getAllThemesWithWords);
+
+router.get('/:name', getThemeByName);
 
 router.get('/:id', getThemeById);
 
