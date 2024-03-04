@@ -3,6 +3,7 @@
 // ----------------------------------------------
 
 const express = require('express');
+const cors = require('cors');
 
 //----------------------------------------------
 // Importation de swagger
@@ -24,6 +25,10 @@ const wordRouter = require('../src/routes/wordRouter.js');
 const server = express();
 server.use(express.json());
 server.set('json spaces', 2);
+
+server.use(cors({
+    origin: '*'
+}))
 
 server.use('/themes', themeRouter);
 server.use('/words', wordRouter);

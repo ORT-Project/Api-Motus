@@ -65,18 +65,25 @@ getThemeByName = async (req, res) => {
     #swagger.tags = ['Themes']
     #swagger.description = 'Récupère un thème par son nom avec ses mots.'
     #swagger.responses[200] = {description : 'Thème récupéré.'}
+    #swagger.responses[404] = {description : 'Aucun thème trouvé avec ce nom.'}
     #swagger.responses[500] = {description : 'Erreur survenue lors de la recuperation des thèmes.'}
     #swagger.parameters['name'] = {description : 'Nom du thème à rechercher.', required : true}
     */
     try {
-        const data = await themeModel.findAll({
+        const queryParam = {
             where: {
                 name: {[Op.iLike]: req.params.name}
             },
             include: [{
                 model: wordModel
             }]
-        })
+        }
+
+        if (!await themeModel.findOne(queryParam)) {
+            return res.status(404).send("Aucun thème trouvé avec ce nom.");
+        }
+
+        const data = await themeModel.findAll(queryParam)
         res.status(200).send(data);
     } catch (error) {
         res.status(500).send({
@@ -96,10 +103,15 @@ getThemeById = async (req, res) => {
     #swagger.tags = ['Themes']
     #swagger.description = 'Récupère un thème par son id.'
     #swagger.responses[200] = {description : 'Thème récupéré.'}
+    #swagger.responses[404] = {description : 'Aucun thème trouvé avec cet id.'}
     #swagger.responses[500] = {description : 'Erreur survenue lors de la recuperation des thèmes.'}
     #swagger.parameters['id'] = {description : 'Id du thème à rechercher.', required : true}
      */
     try {
+        if (!await themeModel.findByPk(parseInt(req.params.id))) {
+            return res.status(404).send("Aucun thème trouvé avec cet id.");
+        }
+
         const data = await themeModel.findByPk(parseInt(req.params.id))
         res.status(200).send(data);
     } catch (error) {
@@ -120,6 +132,7 @@ addTheme = async (req, res) => {
     #swagger.tags = ['Themes']
     #swagger.description = 'Ajoute un thème'
     #swagger.responses[201] = {description : 'Ajout effectué.'}
+    #swagger.responses[400] = {description : 'Ce thème existe déjà.'}
     #swagger.responses[500] = {description : 'Erreur survenue lors de l\'ajout d\'un thème.'}
     #swagger.parameters['name'] = {
         in: 'body',
@@ -137,6 +150,10 @@ addTheme = async (req, res) => {
         }
     */
     try {
+        if (await themeModel.findOne({where: {name: req.body.name}})) {
+            return res.status(400).send("Ce thème existe déjà.");
+        }
+
         await themeModel.create(req.body)
         res.status(201).send("Ajout effectué.");
     } catch (error) {
@@ -158,6 +175,8 @@ modifyTheme = async (req, res) => {
     #swagger.tags = ['Themes']
     #swagger.description = 'Modifie un thème.'
     #swagger.responses[200] = {description : 'Modification effectuée.'}
+    #swagger.responses[400] = {description : 'Ce thème existe déjà.'}
+    #swagger.responses[404] = {description : 'Aucun thème trouvé avec cet id.'}
     #swagger.responses[500] = {description : 'Erreur survenue lors de la modification d\'un thème.'}
     #swagger.parameters['id'] = {description : 'Id du thème à modifier.', required : true}
     #swagger.parameters['name'] = {
@@ -176,6 +195,14 @@ modifyTheme = async (req, res) => {
     }
     */
     try {
+        if (!await themeModel.findByPk(parseInt(req.params.id))) {
+            return res.status(404).send("Aucun thème trouvé avec cet id.");
+        }
+
+        if (await themeModel.findOne({where: {name: req.body.name, id: {[Op.not]: req.params.id}}})) {
+            return res.status(400).send("Ce thème existe déjà.");
+        }
+
         await themeModel.update(req.body, {
             where: {
                 id: req.params.id
@@ -201,10 +228,20 @@ deleteTheme = async (req, res) => {
     #swagger.tags = ['Themes']
     #swagger.description = 'Supprime un thème.'
     #swagger.responses[200] = {description : 'Suppression effectuée.'}
+    #swagger.responses[400] = {description : 'Ce thème est associé à des mots, suppression impossible.'}
+    #swagger.responses[404] = {description : 'Aucun thème trouvé avec cet id.'}
     #swagger.responses[500] = {description : 'Erreur survenue lors de la suppression d\'un thème.'}
     #swagger.parameters['id'] = {description : 'Id du thème à supprimer.', required : true}
      */
     try {
+        if (!await themeModel.findByPk(req.params.id)) {
+            return res.status(404).send("Aucun thème trouvé avec cet id.");
+        }
+
+        if (await wordModel.findOne({where: {theme_id: req.params.id}})) {
+            return res.status(400).send("Ce thème est associé à des mots, suppression impossible.");
+        }
+
         await themeModel.destroy({
             where: {
                 id: req.params.id

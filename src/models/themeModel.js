@@ -13,6 +13,7 @@ const theme = sequelize.define('theme', {
     }
 });
 
+
 theme.hasMany(word, {foreignKey: 'theme_id'});
 
 module.exports = theme
