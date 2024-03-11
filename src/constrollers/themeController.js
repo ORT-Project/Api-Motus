@@ -91,6 +91,47 @@ getThemeByName = async (req, res) => {
         });
     }
 }
+
+/**
+ * Récupère un thème par son alias.
+ * Path : GET /themes/alias/:alias
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+getThemeByAlias = async (req, res) => {
+    /*
+    #swagger.tags = ['Themes']
+    #swagger.description = 'Récupère un thème par son alias.'
+    #swagger.responses[200] = {description : 'Thème récupéré.'}
+    #swagger.responses[404] = {description : 'Aucun thème trouvé avec cet alias.'}
+    #swagger.responses[500] = {description : 'Erreur survenue lors de la recuperation des thèmes.'}
+    #swagger.parameters['alias'] = {description : 'Alias du thème à rechercher.', required : true}
+     */
+
+    const queryParam = {
+        where: {
+            alias: {[Op.iLike]: req.params.alias}
+        },
+        include: [{
+            model: wordModel
+        }]
+    }
+
+    try {
+        if (!await themeModel.findOne(queryParam)) {
+            return res.status(404).send("Aucun thème trouvé avec cet alias.");
+        }
+
+        const data = await themeModel.findOne(queryParam)
+        res.status(200).send(data);
+    } catch (error) {
+        res.status(500).send({
+            message: error.message || "Erreur survenue lors de la recuperation d'un thème."
+        });
+    }
+}
+
 /**
  * Récupère un thème par son id.
  * Path : GET /themes/:id
@@ -120,35 +161,7 @@ getThemeById = async (req, res) => {
         });
     }
 }
-/**
- * Récupère un thème par son alias.
- * Path : GET /themes/alias/:alias
- * @param req
- * @param res
- * @returns {Promise<*>}
- */
-getThemeByAlias = async (req, res) => {
-    /*
-    #swagger.tags = ['Themes']
-    #swagger.description = 'Récupère un thème par son alias.'
-    #swagger.responses[200] = {description : 'Thème récupéré.'}
-    #swagger.responses[404] = {description : 'Aucun thème trouvé avec cet alias.'}
-    #swagger.responses[500] = {description : 'Erreur survenue lors de la recuperation des thèmes.'}
-    #swagger.parameters['alias'] = {description : 'Alias du thème à rechercher.', required : true}
-     */
-    try {
-        if (!await themeModel.findOne({where: {alias: req.params.alias}})) {
-            return res.status(404).send("Aucun thème trouvé avec cet alias.");
-        }
 
-        const data = await themeModel.findOne({where: {alias: req.params.alias}})
-        res.status(200).send(data);
-    } catch (error) {
-        res.status(500).send({
-            message: error.message || "Erreur survenue lors de la recuperation d'un thème."
-        });
-    }
-}
 /**
  * Ajoute un thème.
  * Path : POST /themes
