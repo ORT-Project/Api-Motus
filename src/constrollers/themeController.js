@@ -121,6 +121,35 @@ getThemeById = async (req, res) => {
     }
 }
 /**
+ * Récupère un thème par son alias.
+ * Path : GET /themes/alias/:alias
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+getThemeByAlias = async (req, res) => {
+    /*
+    #swagger.tags = ['Themes']
+    #swagger.description = 'Récupère un thème par son alias.'
+    #swagger.responses[200] = {description : 'Thème récupéré.'}
+    #swagger.responses[404] = {description : 'Aucun thème trouvé avec cet alias.'}
+    #swagger.responses[500] = {description : 'Erreur survenue lors de la recuperation des thèmes.'}
+    #swagger.parameters['alias'] = {description : 'Alias du thème à rechercher.', required : true}
+     */
+    try {
+        if (!await themeModel.findOne({where: {alias: req.params.alias}})) {
+            return res.status(404).send("Aucun thème trouvé avec cet alias.");
+        }
+
+        const data = await themeModel.findOne({where: {alias: req.params.alias}})
+        res.status(200).send(data);
+    } catch (error) {
+        res.status(500).send({
+            message: error.message || "Erreur survenue lors de la recuperation d'un thème."
+        });
+    }
+}
+/**
  * Ajoute un thème.
  * Path : POST /themes
  * @param req
@@ -144,13 +173,19 @@ addTheme = async (req, res) => {
                     "minLength": 1,
                     "maxLength": 255,
                     "example": "Some example..."
+                    },
+                "alias": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255,
+                    "example": "Some example..."
                     }
                 }
             }
         }
     */
     try {
-        if (await themeModel.findOne({where: {name: req.body.name}})) {
+        if (await themeModel.findOne({where: {name: req.body.name, alias: req.body.alias}})) {
             return res.status(400).send("Ce thème existe déjà.");
         }
 
@@ -182,9 +217,15 @@ modifyTheme = async (req, res) => {
     #swagger.parameters['name'] = {
     in: 'body',
     '@schema': {
-        "required": ["name"],
+        "required": ["name", "alias"],
         "properties": {
             "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 255,
+                "example": "Some example..."
+                },
+            "alias": {
                 "type": "string",
                 "minLength": 1,
                 "maxLength": 255,
@@ -259,6 +300,7 @@ module.exports = {
     getAllThemes,
     getThemeByName,
     getAllThemesWithWords,
+    getThemeByAlias,
     getThemeById,
     addTheme,
     modifyTheme,
