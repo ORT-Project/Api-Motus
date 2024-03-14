@@ -11,6 +11,9 @@ const theme = sequelize.define('theme', {
     name: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    alias: {
+        type: DataTypes.STRING
     }
 });
 
