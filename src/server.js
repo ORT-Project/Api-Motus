@@ -9,11 +9,28 @@ const cors = require('cors');
 // Synchro de la base de données
 // ----------------------------------------------
 const sequelize = require('./db/DB-connection.js');
-sequelize.sync().then(() => {
-    console.log('Modèles synchronisés avec la base de données');
-}).catch(err => {
-    console.error('Erreur lors de la synchronisation des modèles:', err);
-})
+
+async function databaseExists() {
+    try {
+        // Vérifiez si une table existe dans la base de données
+        await sequelize.authenticate();
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+async function syncDatabase() {
+    const dbExists = await databaseExists();
+    if (!dbExists) {
+        await sequelize.sync();
+        console.log('Base de données synchronisée avec les modèles.');
+    } else {
+        console.log('La base de données existe déjà. Aucune synchronisation nécessaire.');
+    }
+}
+
+syncDatabase()
 
 //----------------------------------------------
 // Importation de swagger
