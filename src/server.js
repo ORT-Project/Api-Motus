@@ -5,6 +5,16 @@
 const express = require('express');
 const cors = require('cors');
 
+// ----------------------------------------------
+// Synchro de la base de données
+// ----------------------------------------------
+const sequelize = require('./db/DB-connection.js');
+sequelize.sync().then(() => {
+    console.log('Modèles synchronisés avec la base de données');
+}).catch(err => {
+    console.error('Erreur lors de la synchronisation des modèles:', err);
+})
+
 //----------------------------------------------
 // Importation de swagger
 //----------------------------------------------

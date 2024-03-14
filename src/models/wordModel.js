@@ -1,6 +1,5 @@
 const {DataTypes} = require('sequelize');
 const sequelize = require('../db/DB-connection');
-const theme = require('./themeModel');
 
 
 const word = sequelize.define('word', {
@@ -10,17 +9,15 @@ const word = sequelize.define('word', {
         primaryKey: true
     },
     word: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
     definition: {
         type: DataTypes.STRING
     },
     theme_id: {
         type: DataTypes.INTEGER,
-        references: {
-            model: theme,
-            key: 'id'
-        }
+        allowNull: false
     }
 });
 
