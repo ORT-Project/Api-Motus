@@ -123,7 +123,7 @@ getThemeByAlias = async (req, res) => {
             return res.status(404).send("Aucun thème trouvé avec cet alias.");
         }
 
-        const data = await themeModel.findOne(queryParam)
+        const data = await themeModel.findAll(queryParam)
         res.status(200).send(data);
     } catch (error) {
         res.status(500).send({
